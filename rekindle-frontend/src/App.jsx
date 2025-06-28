@@ -17,6 +17,9 @@ import { useNavigate } from 'react-router-dom';
 import familyPlaceholder from './assets/background.jpg'; // Main image
 import readFallback from './assets/read.png'; // Fallback image
 import completePicFallback from './assets/completepic.png'; // Final fallback image
+import OmniChatbotWidget from "./OmniChatbotWidget";
+import AnalyticsDashboard from "./AnalyticsDashboard";
+import { analytics } from "./utils/analytics";
 
 // Auth context for login state
 const AuthContext = createContext();
@@ -93,6 +96,8 @@ function Navbar() {
         <Link to="/" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Home</Link>
         <Link to="/games" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Games</Link>
         <Link to="/community" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Community</Link>
+        <Link to="/chatbot" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">AI Chatbot</Link>
+        <Link to="/analytics" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Analytics</Link>
         <Link to="/login" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Login</Link>
       </div>
     </nav>
@@ -112,6 +117,15 @@ function PageLayout({ children, sticker }) {
 }
 
 function Home() {
+  const { userId } = useAuth();
+
+  // Track page view
+  useEffect(() => {
+    if (userId) {
+      analytics.pageView(userId, 'home');
+    }
+  }, [userId]);
+
   return (
     <>
       <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 120, damping: 8, delay: 0.1 }} className="text-5xl md:text-6xl font-extrabold mb-6 text-blue-900 drop-shadow-[0_4px_24px_rgba(30,64,175,0.3)] text-center">Welcome to ReKindle</motion.h1>
@@ -126,6 +140,15 @@ function Home() {
 
 function Games() {
   const navigate = useNavigate();
+  const { userId } = useAuth();
+
+  // Track page view
+  useEffect(() => {
+    if (userId) {
+      analytics.pageView(userId, 'games');
+    }
+  }, [userId]);
+
   return (
     <>
       <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 120, damping: 8, delay: 0.1 }} className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 text-center">Games</motion.h1>
@@ -176,11 +199,25 @@ function Community() {
     ],
   ]);
   const [newMsg, setNewMsg] = useState("");
+  const { userId } = useAuth();
+
+  // Track page view
+  useEffect(() => {
+    if (userId) {
+      analytics.pageView(userId, 'community');
+    }
+  }, [userId]);
 
   const handlePost = (e) => {
     e.preventDefault();
     if (newMsg.trim()) {
       setMessagesByRole(msgs => msgs.map((arr, idx) => idx === activeTab ? [...arr, { id: Date.now(), user: 'You', text: newMsg }] : arr));
+      
+      // Track community post
+      if (userId) {
+        analytics.communityPost(userId, roles[activeTab].toLowerCase());
+      }
+      
       setNewMsg("");
     }
   };
@@ -408,6 +445,8 @@ function LoginSignup() {
       body: JSON.stringify({ email, password }),
     });
     if (res.ok) {
+      // Track signup event
+      analytics.signup(email);
       navigate('/details');
     } else {
       const data = await res.json();
@@ -424,7 +463,10 @@ function LoginSignup() {
     });
     if (res.ok) {
       const data = await res.json();
-      login(data.token, JSON.parse(atob(data.token.split('.')[1])).userId);
+      const userId = JSON.parse(atob(data.token.split('.')[1])).userId;
+      login(data.token, userId);
+      // Track login event
+      analytics.login(userId);
       navigate('/games');
     } else {
       const data = await res.json();
@@ -517,58 +559,57 @@ function LoginSignup() {
 function MakeCatHappyGame() {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [catType, setCatType] = useState('happy'); // 'happy' or 'sad'
+  const [happiness, setHappiness] = useState(50);
+  const [catType, setCatType] = useState('happy');
   const [position, setPosition] = useState({ top: 200, left: 200 });
-  const [intervalId, setIntervalId] = useState(null);
-  const [happiness, setHappiness] = useState(50); // 0 (sad) to 100 (happy)
+  const [showSticker, setShowSticker] = useState(null);
   const [endMsg, setEndMsg] = useState('');
-  const [showSticker, setShowSticker] = useState(null); // 'correct' | 'wrong' | null
+  const { userId } = useAuth();
 
   useEffect(() => {
-    if (gameOver) {
-      if (intervalId) clearInterval(intervalId);
-      return;
+    // Track game start
+    if (userId) {
+      analytics.gameStart(userId, 'make_cat_happy');
     }
-    // Show a new cat every 900ms
-    const id = setInterval(() => {
-      setCatType(Math.random() < 0.5 ? 'happy' : 'sad');
-      // Cat image is 224x224px, box is 500x500px. Always keep the cat fully inside the box.
-      const boxSize = 500;
-      const catSize = 224;
-      const min = 0;
-      const max = boxSize - catSize; // 276
-      let top = Math.floor(Math.random() * (max - min + 1)) + min;
-      let left = Math.floor(Math.random() * (max - min + 1)) + min;
-      // Clamp to ensure the cat never goes out of the box
-      top = Math.max(min, Math.min(max, top));
-      left = Math.max(min, Math.min(max, left));
-      setPosition({ top, left });
-    }, 900);
-    setIntervalId(id);
-    return () => clearInterval(id);
-  }, [gameOver]);
+    moveCat();
+  }, []);
 
-  useEffect(() => {
-    if (happiness <= 0) {
-      setEndMsg('Cat is very sad!');
-      setGameOver(true);
-    } else if (happiness >= 100) {
-      setEndMsg('Cat is super happy!');
-      setGameOver(true);
-    }
-  }, [happiness]);
+  const moveCat = () => {
+    setPosition({
+      top: Math.random() * 300,
+      left: Math.random() * 300,
+    });
+    setCatType(Math.random() > 0.5 ? 'happy' : 'sad');
+  };
 
   const handleCatClick = () => {
-    if (catType === 'sad') {
-      setHappiness(h => Math.max(0, h - 15));
-      setScore(score + 1);
-      setShowSticker('wrong');
-    } else {
-      setHappiness(h => Math.min(100, h + 10));
-      setScore(score + 1);
-      setShowSticker('correct');
+    if (gameOver) return;
+    
+    const newHappiness = catType === 'happy' ? happiness + 10 : happiness - 10;
+    const newScore = catType === 'happy' ? score + 1 : score - 1;
+    
+    setHappiness(newHappiness);
+    setScore(newScore);
+    setShowSticker(catType === 'happy' ? 'correct' : 'wrong');
+    
+    setTimeout(() => setShowSticker(null), 2000);
+    moveCat();
+    
+    if (newHappiness >= 100) {
+      setGameOver(true);
+      setEndMsg('The cat is extremely happy! You won!');
+      // Track game completion
+      if (userId) {
+        analytics.gameComplete(userId, 'make_cat_happy', newScore);
+      }
+    } else if (newHappiness <= 0) {
+      setGameOver(true);
+      setEndMsg('The cat is very sad. Game over!');
+      // Track game completion
+      if (userId) {
+        analytics.gameComplete(userId, 'make_cat_happy', newScore);
+      }
     }
-    setTimeout(() => setShowSticker(null), 1000);
   };
 
   const handleRestart = () => {
@@ -576,6 +617,10 @@ function MakeCatHappyGame() {
     setScore(0);
     setHappiness(50);
     setEndMsg('');
+    // Track game restart
+    if (userId) {
+      analytics.gameStart(userId, 'make_cat_happy');
+    }
   };
 
   return (
@@ -744,6 +789,28 @@ function CompleteFamilyPictureGame() {
   );
 }
 
+function Chatbot() {
+  const { userId } = useAuth();
+
+  // Track chatbot usage when component mounts
+  useEffect(() => {
+    if (userId) {
+      analytics.chatbotUsed(userId, 'page_view');
+    }
+  }, [userId]);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 120, damping: 8, delay: 0.1 }} className="text-4xl md:text-5xl font-extrabold mb-6 text-blue-900 text-center">AI Chatbot</motion.h1>
+      <p className="text-xl md:text-2xl mb-6 max-w-xl text-center font-opendyslexic text-blue-900">Chat with our friendly AI assistant for help, support, or just a cheerful conversation!</p>
+      <div className="w-full max-w-lg bg-white/80 rounded-2xl shadow-lg p-8 flex flex-col gap-4 items-center">
+        <span className="text-blue-900 text-lg">(Chatbot powered by Omnidimension)</span>
+      </div>
+      <OmniChatbotWidget />
+    </div>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -756,6 +823,8 @@ function App() {
           <Route path="/login" element={<PageLayout><LoginSignup /></PageLayout>} />
           <Route path="/make-cat-happy" element={<PageLayout><MakeCatHappyGame /></PageLayout>} />
           <Route path="/complete-family-picture" element={<PageLayout><CompleteFamilyPictureGame /></PageLayout>} />
+          <Route path="/chatbot" element={<PageLayout sticker={confused}><Chatbot /></PageLayout>} />
+          <Route path="/analytics" element={<PageLayout><AnalyticsDashboard /></PageLayout>} />
         </Routes>
       </Router>
     </AuthProvider>

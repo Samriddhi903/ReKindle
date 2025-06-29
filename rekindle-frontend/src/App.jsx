@@ -44,7 +44,7 @@ function App() {
             <Route path="/reminders" element={<PageLayout><Reminders /></PageLayout>} />
           </Routes>
           <OmniChatbotWidget />
-        </div>
+      </div>
       </Router>
     </AuthProvider>
   );

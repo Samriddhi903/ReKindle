@@ -116,7 +116,22 @@ export default function Reminders() {
             <p className="mb-4">{dueReminder.reason}</p>
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded font-bold"
-              onClick={() => setShowModal(false)}
+              onClick={async () => {
+                if (dueReminder && dueReminder._id) {
+                  try {
+                    await fetch(`/api/reminders/${dueReminder._id}/delivered`, {
+                      method: 'PATCH',
+                      headers: {
+                        'Authorization': 'Bearer ' + token
+                      }
+                    });
+                  } catch (err) {
+                    // Optionally handle error
+                  }
+                }
+                setShowModal(false);
+                setDueReminder(null);
+              }}
             >
               Dismiss
             </button>

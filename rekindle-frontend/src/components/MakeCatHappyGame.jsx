@@ -96,9 +96,9 @@ export function MakeCatHappyGame() {
       
       <div className="relative w-[500px] h-[500px] bg-white/60 rounded-2xl shadow-lg flex items-center justify-center overflow-hidden">
         {!gameOver ? (
-          <img
-            src={catType === 'happy' ? happyCat : sadCat}
-            alt={catType === 'happy' ? 'Happy Cat' : 'Sad Cat'}
+            <img
+              src={catType === 'happy' ? happyCat : sadCat}
+              alt={catType === 'happy' ? 'Happy Cat' : 'Sad Cat'}
             style={{
               position: 'absolute',
               width: 224,
@@ -108,14 +108,14 @@ export function MakeCatHappyGame() {
               cursor: 'pointer',
               transition: 'all 0.1s',
             }}
-            onClick={handleCatClick}
-          />
+              onClick={handleCatClick}
+            />
         ) : (
           <div className="flex flex-col items-center justify-center w-full h-full">
             <span className="text-2xl font-bold text-blue-900 mb-4">Game Over!</span>
             <span className="text-lg text-blue-900 mb-2">{endMsg}</span>
             <span className="text-lg text-blue-900 mb-4">Score: {score}</span>
-            <button 
+            <button
               className="bg-pastel-mint text-blue-900 font-bold py-2 px-6 rounded shadow hover:bg-pastel-blue transition" 
               onClick={handleRestart}
             >

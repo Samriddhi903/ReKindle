@@ -794,6 +794,16 @@ app.patch('/api/reminders/:id/delivered', authMiddleware, async (req, res) => {
   }
 });
 
+// Get all reminders for the authenticated user
+app.get('/api/reminders', authMiddleware, async (req, res) => {
+  try {
+    const reminders = await Reminder.find({ userId: req.user.userId }).sort({ time: 1 });
+    res.json(reminders);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error fetching reminders' });
+  }
+});
+
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rekindle', {
   useNewUrlParser: true,
   useUnifiedTopology: true

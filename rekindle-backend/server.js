@@ -8,6 +8,7 @@ const User = require('./models/User');
 const Message = require('./models/Message');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Reminder = require('./models/Reminder');
 
 const app = express();
 app.use(cors());
@@ -739,6 +740,57 @@ app.get('/api/community/stats', async (req, res) => {
   } catch (err) {
     console.error('Error fetching community stats:', err);
     res.status(500).json({ error: 'Server error fetching community stats' });
+  }
+});
+
+// Create a reminder
+app.post('/api/reminders', authMiddleware, async (req, res) => {
+  try {
+    const { reason, time } = req.body;
+    if (!reason || !time) {
+      return res.status(400).json({ error: 'Reason and time are required' });
+    }
+    const reminder = new Reminder({
+      userId: req.user.userId,
+      reason,
+      time,
+      delivered: false
+    });
+    await reminder.save();
+    res.status(201).json({ success: true, reminder });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error creating reminder' });
+  }
+});
+
+// Get due reminders for the authenticated user
+app.get('/api/reminders/due', authMiddleware, async (req, res) => {
+  try {
+    const now = new Date();
+    const reminders = await Reminder.find({
+      userId: req.user.userId,
+      delivered: false,
+      time: { $lte: now }
+    }).sort({ time: 1 });
+    res.json(reminders);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error fetching due reminders' });
+  }
+});
+
+// Mark a reminder as delivered
+app.patch('/api/reminders/:id/delivered', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reminder = await Reminder.findOneAndUpdate(
+      { _id: id, userId: req.user.userId },
+      { delivered: true },
+      { new: true }
+    );
+    if (!reminder) return res.status(404).json({ error: 'Reminder not found' });
+    res.json({ success: true, reminder });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error updating reminder' });
   }
 });
 

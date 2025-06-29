@@ -1,6 +1,17 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export function Home() {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/login');
+  };
+
+  const handleLearnMore = () => {
+    navigate('/resources');
+  };
+
   return (
     <>
       <motion.h1 
@@ -15,10 +26,16 @@ export function Home() {
         A warm, friendly space for memory, connection, and joy. Designed for everyone, especially those with ADHD, dementia, dyslexia, and Alzheimer's.
       </p>
       <div className="flex flex-col md:flex-row gap-6">
-        <button className="bg-pastel-mint hover:bg-pastel-blue transition-colors text-2xl rounded-full px-8 py-4 font-bold shadow-lg focus:outline-none focus:ring-4 focus:ring-pastel-lavender text-blue-900">
+        <button 
+          onClick={handleGetStarted}
+          className="bg-pastel-mint hover:bg-pastel-blue transition-colors text-2xl rounded-full px-8 py-4 font-bold shadow-lg focus:outline-none focus:ring-4 focus:ring-pastel-lavender text-blue-900"
+        >
           Get Started
         </button>
-        <button className="bg-pastel-lavender hover:bg-pastel-pink transition-colors text-2xl rounded-full px-8 py-4 font-bold shadow-lg focus:outline-none focus:ring-4 focus:ring-pastel-mint text-blue-900">
+        <button 
+          onClick={handleLearnMore}
+          className="bg-pastel-lavender hover:bg-pastel-pink transition-colors text-2xl rounded-full px-8 py-4 font-bold shadow-lg focus:outline-none focus:ring-4 focus:ring-pastel-mint text-blue-900"
+        >
           Learn More
         </button>
       </div>

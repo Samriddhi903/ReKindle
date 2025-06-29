@@ -11,6 +11,7 @@ export function Navbar() {
         <Link to="/" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Home</Link>
         <Link to="/games" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Games</Link>
         <Link to="/community" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Community</Link>
+        <Link to="/reminders" className="text-lg font-semibold text-blue-900 hover:underline focus:outline-none focus:ring-2 focus:ring-pastel-blue rounded">Reminders</Link>
         {loggedIn ? (
           <button 
             onClick={logout}

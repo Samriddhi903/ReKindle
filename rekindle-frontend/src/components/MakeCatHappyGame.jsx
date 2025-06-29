@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import happyCat from '../assets/happy cat.png';
 import sadCat from '../assets/sad cat.png';
 import correctSticker from '../assets/correct.png';
 import wrongSticker from '../assets/wrong.png';
 
 export function MakeCatHappyGame() {
+  const navigate = useNavigate();
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
   const [catType, setCatType] = useState('happy'); // 'happy' or 'sad'
@@ -67,6 +69,7 @@ export function MakeCatHappyGame() {
     setScore(0);
     setHappiness(50);
     setEndMsg('');
+    if (intervalId) clearInterval(intervalId);
   };
 
   return (
@@ -93,40 +96,82 @@ export function MakeCatHappyGame() {
       
       <div className="relative w-[500px] h-[500px] bg-white/60 rounded-2xl shadow-lg flex items-center justify-center overflow-hidden">
         {!gameOver ? (
-          <>
-            <img
-              src={catType === 'happy' ? happyCat : sadCat}
-              alt={catType === 'happy' ? 'Happy Cat' : 'Sad Cat'}
-              className="absolute cursor-pointer transition-all duration-200 hover:scale-110"
-              style={{ top: position.top, left: position.left }}
-              onClick={handleCatClick}
-            />
-            {showSticker && (
-              <img
-                src={showSticker === 'correct' ? correctSticker : wrongSticker}
-                alt={showSticker === 'correct' ? 'Correct' : 'Wrong'}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 pointer-events-none"
-              />
-            )}
-          </>
+          <img
+            src={catType === 'happy' ? happyCat : sadCat}
+            alt={catType === 'happy' ? 'Happy Cat' : 'Sad Cat'}
+            style={{
+              position: 'absolute',
+              width: 224,
+              height: 224,
+              top: position.top,
+              left: position.left,
+              cursor: 'pointer',
+              transition: 'all 0.1s',
+            }}
+            onClick={handleCatClick}
+          />
         ) : (
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-blue-900 mb-4">{endMsg}</h2>
-            <p className="text-xl text-blue-900 mb-6">Final Score: {score}</p>
-            <button
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <span className="text-2xl font-bold text-blue-900 mb-4">Game Over!</span>
+            <span className="text-lg text-blue-900 mb-2">{endMsg}</span>
+            <span className="text-lg text-blue-900 mb-4">Score: {score}</span>
+            <button 
+              className="bg-pastel-mint text-blue-900 font-bold py-2 px-6 rounded shadow hover:bg-pastel-blue transition" 
               onClick={handleRestart}
-              className="bg-pastel-mint hover:bg-pastel-blue transition-colors text-2xl rounded-full px-8 py-4 font-bold shadow-lg focus:outline-none focus:ring-4 focus:ring-pastel-lavender text-blue-900"
             >
-              Play Again
+              Restart
             </button>
           </div>
         )}
       </div>
       
-      <div className="mt-6 text-center">
-        <p className="text-lg text-blue-900">Score: {score}</p>
-        <p className="text-lg text-blue-900">Happiness: {happiness}%</p>
-      </div>
+      <div className="mt-4 text-blue-900 font-bold text-xl">Score: {score}</div>
+      
+      {/* Jumping sticker animation */}
+      <AnimatePresence>
+        {showSticker === 'correct' && (
+          <motion.div
+            key="correct-wrap"
+            initial={{ x: 120, opacity: 0, scale: 0.7 }}
+            animate={{ x: 0, opacity: 1, scale: 1 }}
+            exit={{ x: 120, opacity: 0, scale: 0.7 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            className="fixed right-24 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center pointer-events-none select-none"
+          >
+            <span className="mb-2 text-2xl font-extrabold text-blue-900 drop-shadow-lg">Yayy so happy!</span>
+            <img
+              src={correctSticker}
+              alt="Correct!"
+              className="w-64 h-64"
+            />
+          </motion.div>
+        )}
+        {showSticker === 'wrong' && (
+          <motion.div
+            key="wrong-wrap"
+            initial={{ x: 120, opacity: 0, scale: 0.7 }}
+            animate={{ x: 0, opacity: 1, scale: 1 }}
+            exit={{ x: 120, opacity: 0, scale: 0.7 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            className="fixed right-24 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center pointer-events-none select-none"
+          >
+            <span className="mb-2 text-2xl font-extrabold text-blue-900 drop-shadow-lg">Oh no! I feel upset!</span>
+            <img
+              src={wrongSticker}
+              alt="Wrong!"
+              className="w-64 h-64"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Back to Games button */}
+      <button
+        onClick={() => navigate('/games')}
+        className="mt-8 bg-pastel-lavender hover:bg-pastel-pink transition-colors text-xl rounded-full px-6 py-3 font-bold shadow focus:outline-none focus:ring-4 focus:ring-pastel-blue text-blue-900"
+      >
+        ← Back to Games
+      </button>
     </div>
   );
 } 

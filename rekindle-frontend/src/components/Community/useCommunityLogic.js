@@ -79,7 +79,7 @@ export const useCommunityLogic = () => {
   // Load subcommunities
   const loadSubcommunities = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/subcommunities');
+      const response = await fetch('https://rekindle-zyhh.onrender.com/api/subcommunities');
       if (response.ok) {
         const data = await response.json();
         setSubcommunities(data.subcommunities);
@@ -94,8 +94,8 @@ export const useCommunityLogic = () => {
   const loadCommunityStats = useCallback(async (subcommunity = null) => {
     try {
       const url = subcommunity 
-        ? `http://localhost:5000/api/community/stats?subcommunity=${subcommunity}`
-        : 'http://localhost:5000/api/community/stats';
+        ? `https://rekindle-zyhh.onrender.com/api/community/stats?subcommunity=${subcommunity}`
+        : 'https://rekindle-zyhh.onrender.com/api/community/stats';
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
@@ -109,7 +109,7 @@ export const useCommunityLogic = () => {
   // Fetch messages for a specific subcommunity and role
   const fetchMessages = useCallback(async (subcommunity, role = null) => {
     try {
-      let url = `http://localhost:5000/api/messages?subcommunity=${subcommunity}`;
+      let url = `https://rekindle-zyhh.onrender.com/api/messages?subcommunity=${subcommunity}`;
       if (role) {
         url += `&role=${role}`;
       }
@@ -192,7 +192,7 @@ export const useCommunityLogic = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/messages', {
+      const response = await fetch('https://rekindle-zyhh.onrender.com/api/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ export const useCommunityLogic = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/messages', {
+      const response = await fetch('https://rekindle-zyhh.onrender.com/api/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -284,7 +284,7 @@ export const useCommunityLogic = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/messages/${messageId}/like`, {
+      const response = await fetch(`https://rekindle-zyhh.onrender.com/api/messages/${messageId}/like`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -317,7 +317,7 @@ export const useCommunityLogic = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/messages/${flaggingMessage.id}/flag`, {
+      const response = await fetch(`https://rekindle-zyhh.onrender.com/api/messages/${flaggingMessage.id}/flag`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

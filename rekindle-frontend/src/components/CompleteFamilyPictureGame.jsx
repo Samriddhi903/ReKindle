@@ -46,7 +46,7 @@ export function CompleteFamilyPictureGame() {
         
         console.log('Fetching family photo for logged in user, token:', token ? 'present' : 'missing');
         
-        const response = await fetch('http://localhost:5000/api/family-photo', {
+        const response = await fetch('https://rekindle-zyhh.onrender.com/api/family-photo', {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -129,7 +129,7 @@ export function CompleteFamilyPictureGame() {
           return;
         }
         
-        const response = await fetch('http://localhost:5000/api/family-photo', {
+        const response = await fetch('https://rekindle-zyhh.onrender.com/api/family-photo', {
           headers: { Authorization: `Bearer ${token}` },
         });
         

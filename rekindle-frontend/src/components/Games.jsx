@@ -18,7 +18,7 @@ const Games = () => {
         setLoadingPhoto(true);
         
         // Build URL with userId if not authenticated
-        let url = 'http://localhost:5000/api/family-photo';
+        let url = 'https://rekindle-zyhh.onrender.com/api/family-photo';
         const headers = {};
         
         if (token && userId) {

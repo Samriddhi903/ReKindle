@@ -54,7 +54,7 @@ export function Details() {
     });
 
     try {
-      const res = await fetch('http://localhost:5000/api/details', {
+      const res = await fetch('https://rekindle-zyhh.onrender.com/api/details', {
         method: 'POST',
         body: formData,
         headers: token ? { Authorization: `Bearer ${token}` } : {},

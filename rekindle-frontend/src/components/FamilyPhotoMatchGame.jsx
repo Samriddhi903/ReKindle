@@ -38,7 +38,7 @@ export function FamilyPhotoMatchGame() {
         
         console.log('Fetching guardians for logged in user, token:', token ? 'present' : 'missing');
         
-        const response = await fetch('http://localhost:5000/api/guardians', {
+        const response = await fetch('https://rekindle-zyhh.onrender.com/api/guardians', {
           headers: { Authorization: `Bearer ${token}` },
         });
         

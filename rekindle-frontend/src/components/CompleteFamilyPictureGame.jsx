@@ -78,7 +78,7 @@ export function CompleteFamilyPictureGame() {
     [newPieces[draggedIdx], newPieces[idx]] = [newPieces[idx], newPieces[draggedIdx]];
     setPieces(newPieces);
     setDraggedIdx(null);
-    
+      
     if (newPieces.every((v, i) => v === i)) {
       // Puzzle completed successfully
       setCompleted(true);
@@ -143,7 +143,7 @@ export function CompleteFamilyPictureGame() {
       } catch (err) {
         console.error('Error fetching family photo:', err);
         setImgSrc(completePicFallback);
-      }
+    }
     };
 
     fetchFamilyPhoto();
@@ -176,7 +176,7 @@ export function CompleteFamilyPictureGame() {
             tabIndex={0}
           />
         ))}
-      </div>
+        </div>
       
       {completed && (
         <div className="text-2xl font-bold text-pastel-mint mb-4">
@@ -185,20 +185,20 @@ export function CompleteFamilyPictureGame() {
       )}
       
       <div className="flex gap-4">
-        <button 
+                  <button
           onClick={handleShuffle}
           className="bg-pastel-blue hover:bg-pastel-mint transition-colors text-xl rounded-full px-6 py-3 font-bold shadow focus:outline-none focus:ring-4 focus:ring-pastel-lavender text-blue-900"
-        >
+                  >
           Shuffle Again
-        </button>
-        
-        <button
+                  </button>
+          
+            <button
           onClick={() => navigate('/games')}
-          className="bg-pastel-lavender hover:bg-pastel-pink transition-colors text-xl rounded-full px-6 py-3 font-bold shadow focus:outline-none focus:ring-4 focus:ring-pastel-blue text-blue-900"
-        >
+              className="bg-pastel-lavender hover:bg-pastel-pink transition-colors text-xl rounded-full px-6 py-3 font-bold shadow focus:outline-none focus:ring-4 focus:ring-pastel-blue text-blue-900"
+            >
           ← Back to Games
-        </button>
-      </div>
+            </button>
+          </div>
 
       {/* Cat Animation */}
       <AnimatePresence>
@@ -220,7 +220,7 @@ export function CompleteFamilyPictureGame() {
               className="w-64 h-64"
             />
           </motion.div>
-        )}
+      )}
       </AnimatePresence>
 
       {/* Success Message Animation */}

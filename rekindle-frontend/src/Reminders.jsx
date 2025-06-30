@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import RemindersList from "./RemindersList";
-import OmniAgentPopup from "./OmniAgentPopup";
-import OmniAgentPopup from "./OmniAgentPopup";
 
 export default function Reminders() {
   const [reason, setReason] = useState("");

@@ -16,6 +16,7 @@ import { FamilyPhotoMatchGame } from './components/FamilyPhotoMatchGame';
 import { SimpleMathGame } from './components/SimpleMathGame';
 import { ColorSequenceGame } from './components/ColorSequenceGame';
 import { WordFindGame } from './components/WordFindGame';
+import LullabyGame from './components/LullabyGame';
 import OmniChatbotWidget from './OmniChatbotWidget';
 import Reminders from './Reminders';
 import hi from './assets/hi.png';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/simple-math" element={<PageLayout><SimpleMathGame /></PageLayout>} />
             <Route path="/color-sequence" element={<PageLayout><ColorSequenceGame /></PageLayout>} />
             <Route path="/word-find" element={<PageLayout><WordFindGame /></PageLayout>} />
+            <Route path="/lullaby" element={<PageLayout><LullabyGame /></PageLayout>} />
             <Route path="/reminders" element={<PageLayout><Reminders /></PageLayout>} />
           </Routes>
           <OmniChatbotWidget />

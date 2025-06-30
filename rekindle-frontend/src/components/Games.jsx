@@ -127,7 +127,7 @@ const Games = () => {
         >
           <div className="text-4xl mb-4">🎨</div>
           <span className="text-2xl font-bold text-blue-900 mb-2">Color Sequence</span>
-          <span className="text-blue-900 text-lg">Remember and repeat color patterns</span>
+          <span className="text-blue-900 text-lg">Click on the correct colour!</span>
         </button>
         
         <button
@@ -136,7 +136,16 @@ const Games = () => {
         >
           <div className="text-4xl mb-4">📝</div>
           <span className="text-2xl font-bold text-blue-900 mb-2">Word Find</span>
-          <span className="text-blue-900 text-lg">Find simple words in a grid</span>
+          <span className="text-blue-900 text-lg">Find words in a grid</span>
+        </button>
+
+        <button
+          onClick={() => navigate('/lullaby')}
+          className="flex flex-col items-center bg-white/80 hover:bg-pastel-mint/60 transition rounded-2xl shadow-lg px-8 py-6 w-64 focus:outline-none focus:ring-4 focus:ring-pastel-blue"
+        >
+          <div className="text-4xl mb-4">🎵</div>
+          <span className="text-2xl font-bold text-blue-900 mb-2">Story Time!</span>
+          <span className="text-blue-900 text-lg">Listen to a fun story!</span>
         </button>
       </div>
     </>

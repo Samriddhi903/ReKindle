@@ -1,4 +1,4 @@
-
+Checkout our demo video: https://youtu.be/P4cEUzymtBw
 # ReKindle
 ![image](https://github.com/user-attachments/assets/882cc4db-5fac-4e9f-8465-39dcb801b964)
 
@@ -9,10 +9,18 @@
 ## Features
 
 - 🎮 **Mini-Games:** Educational and fun games for kids.
+ <img width="1901" height="909" alt="image" src="https://github.com/user-attachments/assets/13a712f7-306b-4a64-855b-4e189c9dae14" />
+
 - 📖 **Story Time:** Listen to bedtime stories, narrated by AI voice (OmniDimension integration).
+  
 - ⏰ **Reminders:** Set and view reminders for daily tasks.
 - 🗣️ **Community:** Create and interact with posts in a safe, moderated environment.
+<img width="1584" height="892" alt="image" src="https://github.com/user-attachments/assets/76d63b06-42c3-4820-bf55-84a668be749f" />
+
+
 - 🤖 **AI Integration:** Chatbot and voice narration powered by OmniDimension.
+ <img width="1619" height="921" alt="image" src="https://github.com/user-attachments/assets/8144dee7-74d0-4aba-b192-880d95df89a7" />
+
 - ♿ **Accessibility:** Dyslexia-friendly fonts, large buttons, and clear color schemes.
 
 ---
@@ -129,12 +137,6 @@ yarn install
 ## Contributing
 
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## License
-
-[MIT](LICENSE)
 
 ---
 

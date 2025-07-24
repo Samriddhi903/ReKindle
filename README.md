@@ -1,3 +1,4 @@
+Try out our app here: https://imaginative-lolly-29ba25.netlify.app/
 Checkout our demo video: https://youtu.be/P4cEUzymtBw
 # ReKindle
 ![image](https://github.com/user-attachments/assets/882cc4db-5fac-4e9f-8465-39dcb801b964)
